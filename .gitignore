@@ -105,3 +105,4 @@ dist
 
 **/.idea
 **/.settings
+**/package-lock.json
