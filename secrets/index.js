@@ -25,10 +25,18 @@ router.post('/secrets/*', (req, resp) => {
             console.debug("Environment name : "+ setting.environment);
             console.debug("Environment description : "+ setting.description);
 
-            let applications = setting.applications;
-            console.debug("Applications  : "+ JSON.stringify(applications));
+            let authenticationSuccess = false;
 
-            applications.filter(app => app.name === applicationName).map(
+            if(setting.authenticationType === 'token') {
+                console.debug("Token Authentication");
+                authenticationSuccess = checkAuthentication(req.query.token, setting, resp);
+            }
+            if(setting.authenticationType === 'api-key') {
+                console.debug("Api-Key Authentication");
+                authenticationSuccess = checkAuthentication(req.header('api-key'), setting, resp);
+            }
+
+            setting.applications.filter(app => app.name === applicationName).map(
                 application => {
                     console.debug("Application name : "+ application.name);
                     console.debug("Application description : "+ application.description);
@@ -48,5 +56,17 @@ router.post('/secrets/*', (req, resp) => {
     return ;
 } );
 
+
+const checkAuthentication = ((secret, setting, response) => {
+     console.error("Client-secret : " + secret);
+
+     if(!setting || secret !== setting.authenticationSecret) {
+             console.error("You do not have the necessary permissions to access this resource");
+             response.statusCode = 401;
+             response.send("You do not have the necessary permissions to access this resource");
+             return ;
+     }
+    return true;
+});
 
 module.exports = router;
