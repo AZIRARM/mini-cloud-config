@@ -1,0 +1,34 @@
+[
+  {
+    "environment": "dev",
+    "description": "test dev",
+    "applications": [
+      {
+        "name": "users-api",
+        "description": "secrets for users api",
+        "secrets": [
+          {
+            "key": "elasticsearch.port",
+            "value": "9200",
+            "description": "elasticsearch port"
+          },
+          {
+            "key": "elasticsearch.url",
+            "value": "https://xxxx",
+            "description": "elasticsearch url"
+          },
+          {
+            "key": "elasticsearch.user",
+            "value": "admin",
+            "description": "elasticsearch user access"
+          },
+          {
+            "key": "elasticsearch.password",
+            "value": "password",
+            "description": "elasticsearch user password"
+          }
+        ]
+      }
+    ]
+  }
+]
