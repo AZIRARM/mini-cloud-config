@@ -1,4 +1,4 @@
-[MIT License](#mit-license)
+[MIT License](#license.md)
  
 # mini-cloud-config
 Mini cloud config to manage configurations
