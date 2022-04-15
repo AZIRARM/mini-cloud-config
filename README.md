@@ -1,4 +1,4 @@
-[MIT License](./license.md)
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](./license.md)
  
 # mini-cloud-config
 Mini cloud config to manage configurations
