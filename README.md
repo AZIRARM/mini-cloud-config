@@ -45,3 +45,30 @@ curl --location --request POST 'http://localhost:9000/secrets/dev/users-api/' \
 
 Today two authentication : token (in query param of url) and by api-key (in the headers of the request)
 
+## With Docker
+
+For example in a entrypoint.sh, you mut set <b>ENV</b> like : dev, prod, prep, qa... and the <b>API_KEY</b> of your mini-cloud-config 
+
+
+
+```
+#!/bin/bash
+
+echo "Start retreive secrets"
+
+API_KEY= "api-key: $API_KEY"
+ACCEPT= "Accept: application/json"
+CONTENT_TYPE= "Content-Type: application/json"
+URL= "http://URL-MINI-CLOUD-CONFIG:9000/secrets/$ENV/users-api/"
+
+curl -X POST --header "$API_KEY" --header "$ACCEPT" --header "$CONTENT_TYPE" "$URL" >> properties.json
+
+echo "Start replace secrets in conf file"
+
+..
+..
+..
+
+```
+
+
