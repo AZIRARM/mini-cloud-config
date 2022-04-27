@@ -76,7 +76,8 @@ function saveSecret(id, isNew) {
                 type: 'POST',
                 data:JSON.stringify(body),
                 success: function(secret) {
-                    alert("Secret: "+secret+", successfully saved")
+                    alert("Secret: "+secret+", successfully saved");
+                    window.location.reload(true);
                 }
             });
 
@@ -120,12 +121,11 @@ function removeSecret(secretKey, isNew, id) {
             type: 'DELETE',
             success: function(secret) {
                 alert("Secret : "+secret+", successfully deleted");
+                $('#'+id).remove();
                 return;
             }
         });
     } else if(isNew) {
-
       $('#'+id).remove();
-
     }
 }

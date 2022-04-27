@@ -1,7 +1,7 @@
 [
   {
     "environment": "development",
-    "description": "development environment",
+    "description": "development environment for developer",
     "authenticationType": "api-key",
     "authenticationSecret": "My-Super-Secret",
     "applications": [
@@ -55,8 +55,14 @@
     "applications": [
       {
         "name": "users-api",
-        "description": "Api to manage users 1 2 3",
-        "secrets": []
+        "description": "To manage users",
+        "secrets": [
+          {
+            "key": "users.api.url",
+            "value": "http://gateway.com/users-api",
+            "description": "users api url on gateway"
+          }
+        ]
       }
     ]
   }

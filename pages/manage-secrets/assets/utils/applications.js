@@ -44,6 +44,7 @@ $('#buttonAddNewAppId').on('click', function() {
             data: JSON.stringify(body),
             success: function(app) {
                 alert("New Application : "+app+", added on environment : "+selectedEnv);
+                 $("#selectApplicationId").append('<option value=\''+app+'\'>'+app+'</option>')
                 return;
             }
         });

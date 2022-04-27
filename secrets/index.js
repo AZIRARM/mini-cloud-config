@@ -115,7 +115,7 @@ router.post('/manage-secrets/environments/:environmentName', function(req,res){
         this.writConfiguration(configuration);
 
         res.statusCode = 200;
-        res.send( environmentName);
+        res.json( environmentName );
     }
     return ;
 });
@@ -134,7 +134,7 @@ router.put('/manage-secrets/environments/:environmentName', function(req,res){
 
         this.writConfiguration(configuration);
         res.statusCode = 200;
-        res.send( req.body.environment );
+        res.json( environment.environment );
 
     });
     return ;
@@ -148,7 +148,7 @@ router.delete('/manage-secrets/environments/:environmentName', function(req,res)
     let configuration = readConfiguration();
     let environments = configuration.filter(environment=>environment.environment !== environmentName);
     this.writConfiguration(environments);
-    res.send(environmentName);
+    res.json(environmentName);
     return ;
 });
 
@@ -203,7 +203,7 @@ router.post('/manage-secrets/environments/:environmentName/applications', functi
         this.writConfiguration(configuration);
 
         res.statusCode = 200;
-        res.send(req.body.name);
+        res.json( req.body.name );
     });
     return ;
 });
@@ -224,7 +224,7 @@ router.put('/manage-secrets/environments/:environmentName/applications/:applicat
                 this.writConfiguration(configuration);
 
                 res.statusCode = 200;
-                res.send(req.body.name);
+                res.json( req.body.name );
             });
     return ;
 });
@@ -248,7 +248,7 @@ router.delete('/manage-secrets/environments/:environmentName/applications/:appli
         this.writConfiguration(configuration);
 
         res.statusCode = 200;
-        res.send(applicationName);
+        res.json( applicationName );
     } );
 
 
@@ -316,7 +316,7 @@ router.post('/manage-secrets/environments/:environmentName/applications/:applica
                 this.writConfiguration(configuration);
 
                 res.statusCode = 200;
-                res.send(req.body.key);
+                res.json(req.body.key);
             });
 
     return;
@@ -346,8 +346,7 @@ router.put('/manage-secrets/environments/:environmentName/applications/:applicat
                     this.writConfiguration(configuration);
 
                     res.statusCode = 200;
-                    res.send(req.body.key);
-                    console.debug("Update secret Success");
+                    res.json(req.body.key);
                  });
     return ;
 });
@@ -367,7 +366,7 @@ router.delete('/manage-secrets/environments/:environmentName/applications/:appli
            this.writConfiguration(configuration);
 
            res.statusCode = 200;
-           res.send(secretKey);
+           res.json(secretKey);
         });
     });
     return ;

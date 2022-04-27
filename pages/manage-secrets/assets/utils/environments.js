@@ -46,6 +46,7 @@ $('#buttonAddNewEnvId').on('click', function() {
             type: 'POST',
             success: function(env) {
                 alert("New environment : "+env+", successfully saved");
+                window.location.reload(true);
                 return;
             },
             error: function(error) {
