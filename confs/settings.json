@@ -1,7 +1,7 @@
 [
   {
-    "environment": "dev",
-    "description": "test dev",
+    "environment": "development",
+    "description": "development environment",
     "authenticationType": "api-key",
     "authenticationSecret": "My-Super-Secret",
     "applications": [
@@ -9,12 +9,54 @@
         "name": "users-api",
         "description": "secrets for users api",
         "secrets": [
-          { "key": "elasticsearch.port", "value": "9200", "description": "elasticsearch port"},
-          { "key": "elasticsearch.url", "value": "https://xxxx", "description": "elasticsearch url"},
-          {"key": "elasticsearch.user", "value": "admin", "description": "elasticsearch user access"},
-          {"key": "elasticsearch.password", "value": "password", "description": "elasticsearch user password"
+          {
+            "key": "elasticsearch.port",
+            "value": "9200",
+            "description": "default elasticsearch port"
+          },
+          {
+            "key": "elasticsearch.url",
+            "value": "https://xxxx",
+            "description": "elasticsearch url"
+          },
+          {
+            "key": "elasticsearch.user",
+            "value": "admin",
+            "description": "elasticsearch user access"
+          },
+          {
+            "key": "elasticsearch.password",
+            "value": "password",
+            "description": "elasticsearch user password"
+          },
+          {
+            "key": "elasticsearch.secured",
+            "value": "false",
+            "description": "elasticsearch secured"
+          },
+          {
+            "key": "elasticsearch.secured",
+            "value": "false",
+            "description": "elasticsearch secured"
+          },
+          {
+            "key": "users-api.token",
+            "value": "dksjdsç\"jnsjds",
+            "description": "users-api token"
           }
         ]
+      }
+    ]
+  },
+  {
+    "environment": "test",
+    "authenticationType": "api-key",
+    "authenticationSecret": "dds!877D7D7DBBD77DVBVD88",
+    "applications": [
+      {
+        "name": "users-api",
+        "description": "Api to manage users 1 2 3",
+        "secrets": []
       }
     ]
   }

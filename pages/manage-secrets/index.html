@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <title>secrets-manager</title>
+        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+        <link rel="stylesheet" href="assets/css/styles.css">
+        <script type="text/javascript" src="assets/jquery/jquery.js"></script>
+    </head>
+
+    <body>
+        <div id="google_translate_element"></div>
+        <h1 style="width: 98%;height: 100px;text-align: center;">
+            Mini Cloud Config
+        </h1>
+        <br>
+        <div class="container">
+            <div class="row">
+                <label for="authorizationKeyId">Authorization - Api Key</label>
+                <input type="text" class="form-control" id="authorizationKeyId" placeholder="Enter your Api key">
+            </div>
+        </div>
+        <br>
+        <br>
+
+
+        <!-- ENVIRONMENTS -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12"><label class="form-label">Environment</label>
+                    <select class="form-select" aria-label="Select Environment" id="selectEnvironmentId">
+                        <option value="none"> Select environment</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4" style="text-align: center; color: blue;">
+                    <i class="fa fa-edit fa-2x" id="buttonEnvironmentEditId" style="visibility: hidden" data-bs-toggle="modal" data-bs-target="#modalUpdateEnv" ></i>
+                </div>
+                <div class="col-md-4" style="text-align: center; color: red;">
+                    <i class="fa fa-plus fa-2x"  id="buttonEnvironmentAddId" data-bs-toggle="modal" data-bs-target="#modalAddEnv" ></i>
+                </div>
+                <div class="col-md-4" style="text-align: center; color: red;">
+                    <i class="fa fa-minus fa-2x"  id="buttonEnvironmentRemoveId" style="visibility: hidden"></i>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- APPLICATIONS -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12"><label class="form-label">Applications</label>
+                    <select class="form-select" aria-label="Select Applications" id="selectApplicationId">
+                        <option value="none"> Select application</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row" style="margin: 5px;">
+                <div class="col-md-4" style="text-align: center; color: blue;">
+                    <i class="fa fa-edit fa-2x" id="selectApplicationEditId" style="visibility: hidden" data-bs-toggle="modal" data-bs-target="#modalUpdateApp"></i>
+                </div>
+                <div class="col-md-4" style="text-align: center; color: red;">
+                    <i class="fa fa-plus fa-2x"  id="buttonApplicationAddId" style="visibility: hidden" data-bs-toggle="modal" data-bs-target="#modalAddApp"></i>
+                </div>
+                <div class="col-md-4" style="text-align: center; color: red;">
+                    <i class="fa fa-minus fa-2x"  id="buttonApplicationRemoveId" style="visibility: hidden"></i>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12" style="margin: 5px;">
+                    <div class="table-responsive">
+                        <table class="table" id="tableSecretsId">
+                            <thead>
+                            <tr>
+                                <th style="text-align: left;">Key</th>
+                                <th style="text-align: left;">Value</th>
+                                <th style="text-align: left;">Description</th>
+                                <th style="text-align: left;">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12" style="text-align: center; color: blue;">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddApp"
+                            style="text-align: center;" onClick="addNewSecret()">
+                        Add new Secret
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal Add new Environment -->
+        <div class="modal fade" id="modalAddEnv" tabindex="-1" role="dialog" aria-labelledby="modalAddEnvLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalAddEnvLabel">Add Environment</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="newEnvId">Environment name</label>
+                            <input type="text" class="form-control" id="newEnvId" placeholder="Enter name">
+                        </div>
+                        <div>
+                            <label for="newEnvDescriptionId">Environment short description</label>
+                            <input type="text" class="form-control" id="newEnvDescriptionId" placeholder="Enter description">
+                        </div>
+                        <div>
+                            <label for="newEnvAuthenticationTypeId">Environment Authentication Type (API-KEY or Token)</label>
+                            <select class="form-select" aria-label="Select Authentication Type" id="newEnvAuthenticationTypeId">
+                                <option value="api-key"> Api key</option>
+                                <option value="token"> Token</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="newEnvId">Environment Authentication Secret</label>
+                            <input type="text" class="form-control" id="newEnvAuthenticationSecretId"
+                                   placeholder="Enter the secret">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="buttonAddNewEnvId" disabled="true">Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Update Environment -->
+        <div class="modal fade" id="modalUpdateEnv" tabindex="-1" role="dialog" aria-labelledby="modalUpdateEnvLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalUpdateEnvLabel">Update Environment</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="updateEnvId">Environment name</label>
+                            <input type="text" class="form-control" id="updateEnvId" placeholder="Enter name">
+                        </div>
+                        <div>
+                            <label for="updateEnvDescriptionId">Environment short description</label>
+                            <input type="text" class="form-control" id="updateEnvDescriptionId" placeholder="Enter description">
+                        </div>
+                        <div>
+                            <label for="updateEnvAuthenticationTypeId">Environment Authentication Type (API-KEY or Token)</label>
+                            <select class="form-select" aria-label="Select Authentication Type" id="updateEnvAuthenticationTypeId">
+                                <option value="api-key"> Api key</option>
+                                <option value="token"> Token</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="updateEnvAuthenticationSecretId">Environment Authentication Secret</label>
+                            <input type="text" class="form-control" id="updateEnvAuthenticationSecretId"
+                                   placeholder="Enter the secret">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="buttonUpdateEnvId">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Modal Add new Applications-->
+        <div class="modal fade" id="modalAddApp" tabindex="-1" role="dialog" aria-labelledby="modalAddAppLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalAddAppLabel">Add Application</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="newAppId">Application name</label>
+                            <input type="text" class="form-control" id="newAppId" placeholder="Enter name">
+                        </div>
+                        <div>
+                            <label for="newAppDescriptionId">Application short description</label>
+                            <input type="text" class="form-control" id="newAppDescriptionId" placeholder="Enter description">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="buttonAddNewAppId" disabled="true">Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Update Applications-->
+        <div class="modal fade" id="modalUpdateApp" tabindex="-1" role="dialog" aria-labelledby="modalUpdateAppLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalUpdateAppLabel">Update Application</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="newAppId">Application name</label>
+                            <input type="text" class="form-control" id="updateAppId" placeholder="Enter name">
+                        </div>
+                        <div>
+                            <label for="newAppDescriptionId">Application short description</label>
+                            <input type="text" class="form-control" id="updateAppDescriptionId" placeholder="Enter description">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="buttonUpdateAppId">Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+        <script type="text/javascript" src="./assets/utils/environments.js"></script>
+        <script type="text/javascript" src="./assets/utils/applications.js"></script>
+        <script type="text/javascript" src="./assets/utils/secrets.js"></script>
+        <script type="text/javascript" src="./assets/utils/commons.js"></script>
+
+
+        <script type="text/javascript">
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+            }
+        </script>
+    </body>
+
+</html>

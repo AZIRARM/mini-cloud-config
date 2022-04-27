@@ -12,3 +12,5 @@ app.use('/', routes);
 app.listen(PORT, () => {
 console.log("Mini Cloud Config is ready and listening at " + PORT)
 })
+
+app.use(express.static('pages'));
