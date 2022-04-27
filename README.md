@@ -51,8 +51,6 @@ Today two authentication : token (in query param of url) and by api-key (in the 
 
 For example in a entrypoint.sh, you mut set <b>ENV</b> like : dev, prod, prep, qa... and the <b>API_KEY</b> of your mini-cloud-config 
 
-
-
 ```
 #!/bin/bash
 
@@ -72,7 +70,38 @@ echo "Start replace secrets in conf file"
 ..
 
 ```
-
+### Configuration file
+The configuration file is in <b>/app/mini-cloud-config/confs</b>.<br>
+In this folder is the <b>settings.json</b> file, you can add a shared volume on this folder, which must contain the settings.json json file.<br>
+The content of this file is very easy to understand.
+```
+[
+  {
+    "environment": "development",
+    "description": "development environment for developer",
+    "authenticationType": "api-key",
+    "authenticationSecret": "My-Super-Secret",
+    "applications": [
+      {
+        "name": "users-api",
+        "description": "secrets for users api",
+        "secrets": [
+          {
+            "key": "elasticsearch.port",
+            "value": "9200",
+            "description": "default elasticsearch port"
+          },
+          {
+            "key": "elasticsearch.url",
+            "value": "https://xxxx",
+            "description": "elasticsearch url"
+          },
+        ]
+      }
+    ]
+  }
+]
+```
 
 ## Web App Configuration
 A web application is available accessible on the path /manage-secrets/index.html.<br>
