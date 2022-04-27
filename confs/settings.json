@@ -28,39 +28,6 @@
             "key": "elasticsearch.password",
             "value": "password",
             "description": "elasticsearch user password"
-          },
-          {
-            "key": "elasticsearch.secured",
-            "value": "false",
-            "description": "elasticsearch secured"
-          },
-          {
-            "key": "elasticsearch.secured",
-            "value": "false",
-            "description": "elasticsearch secured"
-          },
-          {
-            "key": "users-api.token",
-            "value": "dksjdsç\"jnsjds",
-            "description": "users-api token"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "environment": "test",
-    "authenticationType": "api-key",
-    "authenticationSecret": "dds!877D7D7DBBD77DVBVD88",
-    "applications": [
-      {
-        "name": "users-api",
-        "description": "To manage users",
-        "secrets": [
-          {
-            "key": "users.api.url",
-            "value": "http://gateway.com/users-api",
-            "description": "users api url on gateway"
           }
         ]
       }

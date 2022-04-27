@@ -48,6 +48,21 @@ router.post('/secrets/*', (req, resp) => {
     return ;
 } );
 
+
+const checkAuthorization = (req,res, next) => {
+        let authorizationKey =   req.header('Authorization');
+
+         console.debug("Authorization: "+authorizationKey);
+         if(authorizationKey && authorizationKey === process.env.SECRETS_API_TOKEN) {
+             console.debug("Authorization success for : "+req.path);
+             next();
+         } else {
+             console.error("Authorization failed for : "+req.path);
+             res.statusCode = 403;
+             res.send("Authorization failed");
+         }
+}
+
 const checkAuthentication = ((secret, setting, response) => {
      console.error("Client-secret : " + secret);
 
@@ -72,7 +87,7 @@ router.get('/manage-secrets', function(req,res){
 /****************************
 *        Environments       *
 *****************************/
-router.get('/manage-secrets/environments', function(req,res){
+router.get('/manage-secrets/environments', checkAuthorization, function(req,res){
     res.statusCode = 200;
     res.send(readConfiguration().map(env => {
         console.debug("-->"+env.environment)
@@ -81,7 +96,7 @@ router.get('/manage-secrets/environments', function(req,res){
     ));
     return ;
 });
-router.get('/manage-secrets/environments/:environmentName', function(req,res){
+router.get('/manage-secrets/environments/:environmentName', checkAuthorization, function(req,res){
     var environmentName = req.params['environmentName'];
 
     console.debug("Get Environment by name : "+environmentName );
@@ -90,7 +105,7 @@ router.get('/manage-secrets/environments/:environmentName', function(req,res){
     res.send(readConfiguration().filter(setting=>setting.environment === environmentName).map(environment => environment));
     return ;
 });
-router.post('/manage-secrets/environments/:environmentName', function(req,res){
+router.post('/manage-secrets/environments/:environmentName', checkAuthorization, function(req,res){
     var environmentName = req.params['environmentName'];
 
     console.debug("Save new Environment : "+environmentName+", content :"+JSON.stringify(req.body) );
@@ -119,7 +134,7 @@ router.post('/manage-secrets/environments/:environmentName', function(req,res){
     }
     return ;
 });
-router.put('/manage-secrets/environments/:environmentName', function(req,res){
+router.put('/manage-secrets/environments/:environmentName', checkAuthorization, function(req,res){
     var environmentName = req.params['environmentName'];
 
     console.debug("Save Environment : "+environmentName+", content :"+JSON.stringify(req.body) );
@@ -139,7 +154,7 @@ router.put('/manage-secrets/environments/:environmentName', function(req,res){
     });
     return ;
 });
-router.delete('/manage-secrets/environments/:environmentName', function(req,res){
+router.delete('/manage-secrets/environments/:environmentName', checkAuthorization, function(req,res){
     var environmentName = req.params['environmentName'];
 
     console.debug("Remove Environment by name : "+environmentName );
@@ -156,7 +171,7 @@ router.delete('/manage-secrets/environments/:environmentName', function(req,res)
 /****************************
 *        Applications       *
 *****************************/
-router.get('/manage-secrets/environments/:environmentName/applications', function(req,res){
+router.get('/manage-secrets/environments/:environmentName/applications', checkAuthorization, function(req,res){
     var environmentName = req.params['environmentName'];
 
     console.debug("Get application of environment: "+environmentName )
@@ -167,7 +182,7 @@ router.get('/manage-secrets/environments/:environmentName/applications', functio
     ));
     return ;
 });
-router.get('/manage-secrets/environments/:environmentName/applications/:applicationName', function(req,res){
+router.get('/manage-secrets/environments/:environmentName/applications/:applicationName', checkAuthorization, function(req,res){
     var applicationName = req.params['applicationName'];
     var environmentName = req.params['environmentName'];
 
@@ -186,7 +201,7 @@ router.get('/manage-secrets/environments/:environmentName/applications/:applicat
     res.send(applications[0]);
     return ;
 });
-router.post('/manage-secrets/environments/:environmentName/applications', function(req,res){
+router.post('/manage-secrets/environments/:environmentName/applications', checkAuthorization, function(req,res){
     var environmentName = req.params['environmentName'];
 
     console.debug("Add new Application : "+JSON.stringify(req.body));
@@ -207,7 +222,7 @@ router.post('/manage-secrets/environments/:environmentName/applications', functi
     });
     return ;
 });
-router.put('/manage-secrets/environments/:environmentName/applications/:applicationName', function(req,res){
+router.put('/manage-secrets/environments/:environmentName/applications/:applicationName', checkAuthorization, function(req,res){
     var applicationName = req.params['applicationName'];
     var environmentName = req.params['environmentName'];
 
@@ -228,7 +243,7 @@ router.put('/manage-secrets/environments/:environmentName/applications/:applicat
             });
     return ;
 });
-router.delete('/manage-secrets/environments/:environmentName/applications/:applicationName', function(req,res){
+router.delete('/manage-secrets/environments/:environmentName/applications/:applicationName', checkAuthorization, function(req,res){
     var applicationName = req.params['applicationName'];
     var environmentName = req.params['environmentName'];
 
@@ -259,7 +274,7 @@ router.delete('/manage-secrets/environments/:environmentName/applications/:appli
 /****************************
 *           Secrets         *
 *****************************/
-router.get('/manage-secrets/environments/:environmentName/applications/:applicationName/secrets', function(req,res){
+router.get('/manage-secrets/environments/:environmentName/applications/:applicationName/secrets', checkAuthorization, function(req,res){
     var applicationName = req.params['applicationName'];
     var environmentName = req.params['environmentName'];
     console.debug("Get application : "+applicationName+" of environment: "+environmentName )
@@ -272,10 +287,10 @@ router.get('/manage-secrets/environments/:environmentName/applications/:applicat
                 });
             })
         }
-    ));
+    ).flatMap(secret => secret));
     return ;
 });
-router.get('/manage-secrets/environments/:environmentName/applications/:applicationName/secrets/:secretKey', function(req,res){
+router.get('/manage-secrets/environments/:environmentName/applications/:applicationName/secrets/:secretKey', checkAuthorization, function(req,res){
     var secretKey = req.params['secretKey']
     var environmentName = req.params['environmentName'];
     var applicationName = req.params['applicationName'];
@@ -295,7 +310,7 @@ router.get('/manage-secrets/environments/:environmentName/applications/:applicat
     ));
     return ;
 });
-router.post('/manage-secrets/environments/:environmentName/applications/:applicationName/secrets', function(req,res){
+router.post('/manage-secrets/environments/:environmentName/applications/:applicationName/secrets', checkAuthorization, function(req,res){
     var secretKey = req.params['secretKey']
     var environmentName = req.params['environmentName'];
     var applicationName = req.params['applicationName'];
@@ -321,7 +336,7 @@ router.post('/manage-secrets/environments/:environmentName/applications/:applica
 
     return;
 });
-router.put('/manage-secrets/environments/:environmentName/applications/:applicationName/secrets/:secretKey', function(req,res){
+router.put('/manage-secrets/environments/:environmentName/applications/:applicationName/secrets/:secretKey', checkAuthorization, function(req,res){
     var secretKey = req.params['secretKey']
     var environmentName = req.params['environmentName'];
     var applicationName = req.params['applicationName'];
@@ -350,7 +365,7 @@ router.put('/manage-secrets/environments/:environmentName/applications/:applicat
                  });
     return ;
 });
-router.delete('/manage-secrets/environments/:environmentName/applications/:applicationName/secrets/:secretKey', function(req,res){
+router.delete('/manage-secrets/environments/:environmentName/applications/:applicationName/secrets/:secretKey', checkAuthorization, function(req,res){
     var secretKey = req.params['secretKey']
     var environmentName = req.params['environmentName'];
     var applicationName = req.params['applicationName'];
@@ -388,7 +403,6 @@ readConfiguration = (() => {
 
     return settings;
 });
-
 
 
 module.exports = router;

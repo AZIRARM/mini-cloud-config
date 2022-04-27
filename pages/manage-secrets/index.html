@@ -18,8 +18,13 @@
         <br>
         <div class="container">
             <div class="row">
-                <label for="authorizationKeyId">Authorization - Api Key</label>
-                <input type="text" class="form-control" id="authorizationKeyId" placeholder="Enter your Api key">
+                <div class="col-md-10">
+                    <label for="authorizationKeyId">Authorization - Api Key</label>
+                    <input type="text" class="form-control" id="authorizationKeyId" placeholder="Enter your Api key">
+                </div>
+                <div class="col-md-2">
+                    <i class="fa fa-refresh fa-2x" style="margin-top:20px; cursor: grab;" id="refreshAuthorizationId"></i>
+                </div>
             </div>
         </div>
         <br>
@@ -87,7 +92,7 @@
                                 <th style="text-align: left;">Actions</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tableBodySecretsId">
 
                             </tbody>
                         </table>

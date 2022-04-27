@@ -6,6 +6,9 @@ $('#selectApplicationId').on('change', function() {
 
     $.ajax({
         url: './environments/'+selectedEnv+'/applications/'+this.value,
+        headers: {
+           'Authorization': $('#authorizationKeyId').val()
+        },
         type: 'GET',
         success: function(response) {
              $("#updateAppId").val(response.name);
@@ -14,14 +17,31 @@ $('#selectApplicationId').on('change', function() {
         }
     });
 });
+$('#selectApplicationId').on('change', function() {
+     if(this.value && this.value !== 'none') {
+        $('#selectApplicationEditId').css('visibility', 'visible');
+        $('#buttonApplicationRemoveId').css('visibility', 'visible');
+     } else {
+        $('#selectApplicationEditId').css('visibility', 'hidden');
+        $('#buttonApplicationRemoveId').css('visibility', 'hidden');
+     }
+});
+
+
 
 $('#newAppId').on('input', function() {
-  $.get( "./environments/"+this.value, function( data ) {
-    data.map(env => {
-         $("#buttonAddNewAppId").prop("disabled",true);
-         return;
+    $.ajax({
+        url: './environments/'+this.value,
+        headers: {
+           'Authorization': $('#authorizationKeyId').val()
+        },
+        type: 'GET',
+        success: function(app) {
+            $("#buttonAddNewAppId").prop("disabled", (app && app !== null && app.length > 0) ? true: false);
+            return;
+
+        }
     });
-  });
 
   $("#buttonAddNewAppId").prop("disabled",false);
   return;
@@ -41,10 +61,16 @@ $('#buttonAddNewAppId').on('click', function() {
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             type: 'POST',
+            headers: {
+               'Authorization': $('#authorizationKeyId').val()
+            },
             data: JSON.stringify(body),
             success: function(app) {
                 alert("New Application : "+app+", added on environment : "+selectedEnv);
-                 $("#selectApplicationId").append('<option value=\''+app+'\'>'+app+'</option>')
+                 $("#selectApplicationId").append('<option value=\''+app+'\'>'+app+'</option>');
+                 $('#selectApplicationEditId').css('visibility', 'hidden');
+                 $('#buttonApplicationRemoveId').css('visibility', 'hidden');
+                 $('#modalAddApp').modal('hide');
                 return;
             }
         });
@@ -66,24 +92,19 @@ $('#buttonUpdateAppId').on('click', function() {
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             type: 'PUT',
+            headers: {
+               'Authorization': $('#authorizationKeyId').val()
+            },
             data: JSON.stringify(body),
             success: function(app) {
-                alert("Application : "+app.name+", successfully updated");
+                alert("Application : "+app+", successfully updated");
+                $('#modalUpdateApp').modal('hide');
                 return;
             }
         });
     } else {
         alert("Select an environment to add a new Application");
     }
-});
-$('#selectApplicationId').on('change', function() {
-     if(this.value && this.value !== 'none') {
-        $('#selectApplicationEditId').css('visibility', 'visible');
-        $('#buttonApplicationRemoveId').css('visibility', 'visible');
-     } else {
-        $('#selectApplicationEditId').css('visibility', 'hidden');
-        $('#buttonApplicationRemoveId').css('visibility', 'hidden');
-     }
 });
 $('#buttonApplicationRemoveId').on('click', function() {
     var selectedEnv = $('#selectEnvironmentId').find("option:selected").val();
@@ -92,10 +113,18 @@ $('#buttonApplicationRemoveId').on('click', function() {
         if ( confirm("Remove Application: "+selectedApp+" from environment: "+selectedEnv + " ? ") ) {
             $.ajax({
                     url: './environments/'+selectedEnv+'/applications/'+ selectedApp,
+                    headers: {
+                       'Authorization': $('#authorizationKeyId').val()
+                    },
                     type: 'DELETE',
                     success: function(app) {
                         alert("Application : "+selectedApp+", Removed successfully on environment : "+selectedEnv);
-                        window.location.reload(true);
+                        $("#selectApplicationId option[value='"+selectedApp+"']").remove();
+                        $('#selectApplicationEditId').css('visibility', 'hidden');
+                        $('#buttonApplicationRemoveId').css('visibility', 'hidden');
+
+                        $("#tableBodySecretsId").empty();
+
                         return;
                     }
                 });

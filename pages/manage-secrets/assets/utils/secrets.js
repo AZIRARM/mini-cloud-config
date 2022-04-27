@@ -1,11 +1,22 @@
 //SECRETS
 
 $('#selectApplicationId').on('change', function() {
-  $("#tableSecretsId").find("tr:gt(0)").remove();
-  $.get( "./environments/"+$('#selectEnvironmentId').find("option:selected").val()+"/applications/"+this.value+"/secrets", function( data ) {
-    data.map(secrets=> {
+    reloadSecrets(this.value);
+});
+
+
+reloadSecrets = ((application) => {
+    $("#tableSecretsId").find("tr:gt(0)").remove();
+    $.ajax({
+        url: './environments/'+$('#selectEnvironmentId').find("option:selected").val()+'/applications/'+application+'/secrets',
+        headers: {
+           'Authorization': $('#authorizationKeyId').val()
+        },
+        type: 'GET',
+        success: function(secrets) {
+
         console.log(JSON.stringify(secrets));
-        secrets[0].map(secret => {
+        secrets[0].flatMap(secret => {
             var genId = generateId(20);
             var selectedEnv = $('#selectEnvironmentId').find("option:selected").val();
             var selectedApp = $('#selectApplicationId').find("option:selected").val();
@@ -24,11 +35,10 @@ $('#selectApplicationId').on('change', function() {
                     '<i class="fa fa-trash fa-2x" style="margin: 5px" onClick="removeSecret(\''+secret.key+'\', false,\''+genId+'\')"></i>'+
                 '</td>'+
             '</tr>');
-        });
+            });
+        }
     });
-  });
 });
-
 
 const addNewSecret = (() => {
   var selectedEnv = $('#selectEnvironmentId').find("option:selected").val();
@@ -74,10 +84,13 @@ function saveSecret(id, isNew) {
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 type: 'POST',
+                headers: {
+                   'Authorization': $('#authorizationKeyId').val()
+                },
                 data:JSON.stringify(body),
                 success: function(secret) {
                     alert("Secret: "+secret+", successfully saved");
-                    window.location.reload(true);
+                    reloadSecrets(app);
                 }
             });
 
@@ -97,6 +110,9 @@ function saveSecret(id, isNew) {
                     url: './environments/'+env+'/applications/'+ app+"/secrets/"+originKey,
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
+                    headers: {
+                       'Authorization': $('#authorizationKeyId').val()
+                    },
                     data: JSON.stringify(body),
                     type: 'PUT',
                     success: function(secret) {
@@ -118,6 +134,9 @@ function removeSecret(secretKey, isNew, id) {
     if ( confirm("Remove secret, Env: "+env+", Application: "+app+", Secret key: "+secretKey) && !isNew) {
          $.ajax({
             url: './environments/'+env+'/applications/'+ app+"/secrets/"+secretKey,
+            headers: {
+               'Authorization': $('#authorizationKeyId').val()
+            },
             type: 'DELETE',
             success: function(secret) {
                 alert("Secret : "+secret+", successfully deleted");

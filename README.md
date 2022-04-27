@@ -33,7 +33,9 @@ You can have several environments (a different name each time), each environment
 ```
 
 ## Server parameters
-you can change the server port by setting the environment variable: SECRETS_PORT
+<b>SECRETS_PORT</b>: Server port, default 9000 if not setted in environments variables.<br>
+<b>SECRETS_API_TOKEN</b>: Secret key if you want to use Admin Console, if not setted it generated on server started.<br>
+
 
 # How to use
 ```
@@ -72,3 +74,12 @@ echo "Start replace secrets in conf file"
 ```
 
 
+## Web App Configuration
+A web application is available accessible on the path /manage-secrets/index.html.<br>
+
+To be able to use it you must have the access token, the latter is generated when the application starts:
+```
+Authorization: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+Otherwise set the <b>SECRETS_API_TOKEN</b> variable in the environment variables (when launching the Docker container for example on your machine). You can also and on your development computer in the <b>.env</b> (dotenv) file at the root of the project.

@@ -1,5 +1,22 @@
 //Environments
 
+
+$('#refreshAuthorizationId').on('click', function() {
+    $("#selectEnvironmentId").empty().append('<option value="none"> Select environment </option>');;
+    $.ajax({
+        url: './environments',
+        headers: {
+           'Authorization': $('#authorizationKeyId').val()
+        },
+        type: 'GET',
+        success: function(environments) {
+           environments.map(env=> {
+               $("#selectEnvironmentId").append('<option value=\''+env+'\'>'+env+'</option>');
+           });
+        }
+    });
+});
+
 $.get( "./environments", function( data ) {
     $('#selectEnvironmentId').empty().append('<option value="none"> Select environment </option>');
     data.map(env=> {
@@ -7,17 +24,25 @@ $.get( "./environments", function( data ) {
     });
 });
 
+
 $('#newEnvId').on('input', function() {
-  $.get( "./environments/"+this.value, function( data ) {
-    data.map(env => {
-         $("#buttonAddNewEnvId").prop("disabled",true);
-         return;
+
+    $.ajax({
+        url: './environments/'+this.value,
+        headers: {
+           'Authorization': $('#authorizationKeyId').val()
+        },
+        type: 'GET',
+        success: function(env) {
+             $("#buttonAddNewEnvId").prop("disabled", (env && env !== null && env.length > 0) ? true: false);
+             return;
+        }
     });
-  });
 
   $("#buttonAddNewEnvId").prop("disabled",false);
   return;
 });
+
 $('#buttonAddNewEnvId').on('click', function() {
       var selectedEnv = $('#newEnvId').val();
       var appDescription = $('#newEnvDescriptionId').val();
@@ -42,16 +67,17 @@ $('#buttonAddNewEnvId').on('click', function() {
             url: './environments/'+selectedEnv,
             dataType: "json",
             contentType: "application/json; charset=utf-8",
+            headers: {
+               'Authorization': $('#authorizationKeyId').val()
+            },
             data: JSON.stringify(body),
             type: 'POST',
             success: function(env) {
                 alert("New environment : "+env+", successfully saved");
-                window.location.reload(true);
-                return;
-            },
-            error: function(error) {
-                alert("Save failed : "+error);
-                 window.location.reload(true);
+                $("#selectEnvironmentId").append('<option value=\''+selectedEnv+'\'>'+selectedEnv+'</option>');
+                $('#buttonEnvironmentEditId').css('visibility', 'hidden');
+                $('#buttonEnvironmentRemoveId').css('visibility', 'hidden');
+                $('#modalAddEnv').modal('hide');
                 return;
             }
         });
@@ -88,16 +114,14 @@ $('#buttonUpdateEnvId').on('click', function() {
             url: './environments/'+selectedEnv,
             dataType: "json",
             contentType: "application/json; charset=utf-8",
+            headers: {
+               'Authorization': $('#authorizationKeyId').val()
+            },
             data: JSON.stringify(body),
             type: 'PUT',
             success: function(env) {
                 alert("Environment : "+env+", updated successfully");
-                 window.location.reload(true);
-                return;
-            },
-            error: function(error) {
-                alert("Updated failed : "+error);
-                 window.location.reload(true);
+                $('#modalUpdateEnv').modal('hide');
                 return;
             }
         });
@@ -105,13 +129,19 @@ $('#buttonUpdateEnvId').on('click', function() {
 });
 
 $('#selectEnvironmentId').on('change', function() {
-          $('#selectApplicationId').empty().append('<option value="none"> Select application </option>');
-      $.get( "./environments/"+this.value+"/applications", function( data ) {
-        data.map(applications=>
-            applications.map(application => $("#selectApplicationId").append('<option value=\''+application+'\'>'+application+'</option>'))
-        );
-      });
+    $('#selectApplicationId').empty().append('<option value="none"> Select application </option>');
+
+    $.ajax({
+        url: './environments/'+this.value+'/applications',
+        headers: {
+           'Authorization': $('#authorizationKeyId').val()
+        },
+        type: 'GET',
+        success: function(applications) {
+           applications.map(application => $("#selectApplicationId").append('<option value=\''+application+'\'>'+application+'</option>'));
+        }
     });
+});
 $('#selectEnvironmentId').on('change', function() {
      if(this.value && this.value !== 'none') {
         $('#buttonEnvironmentEditId').css('visibility', 'visible');
@@ -135,10 +165,17 @@ $('#buttonEnvironmentRemoveId').on('click', function() {
         if ( confirm("Remove Environment: "+selectedEnv+" ? ") ) {
             $.ajax({
                     url: './environments/'+selectedEnv,
+                    headers: {
+                       'Authorization': $('#authorizationKeyId').val()
+                    },
                     type: 'DELETE',
                     success: function(env) {
                         alert("Environment : "+selectedEnv+", Removed successfully");
-                        window.location.reload(true);
+                        $("#selectEnvironmentId option[value='"+selectedEnv+"']").remove();
+
+                        $('#selectApplicationId').empty().append('<option value="none"> Select application </option>');
+                        $("#tableBodySecretsId").empty();
+
                         return;
                     }
                 });
@@ -147,14 +184,15 @@ $('#buttonEnvironmentRemoveId').on('click', function() {
         alert("To remove Environment from configuration you need to select environment");
     }
 });
-$('#selectEnvironmentId').on('click', function() {
 
-});
 
 $('#selectEnvironmentId').on('change', function() {
     $.ajax({
         url: './environments/'+this.value,
         type: 'GET',
+        headers: {
+           'Authorization': $('#authorizationKeyId').val()
+        },
         success: function(env) {
              $("#updateEnvId").val(env[0].environment);
              $("#updateEnvDescriptionId").val(env[0].description);
