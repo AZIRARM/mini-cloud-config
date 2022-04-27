@@ -20,8 +20,8 @@ $('#selectApplicationId').on('change', function() {
                     '<input value="'+secret.key+'" style="width:98%" type="hidden" id="secretKeyOrigin_'+genId+'"/>'+
                 '</td>'+
                 '<td style="text-align:center; margin:5x;">'+
-                    '<i class="fa fa-save fa-2x" onClick="saveSecret(\''+genId+'\',false)"></i>'+
-                    '<i class="fa fa-trash fa-2x" onClick="removeSecret(\''+secret.key+'\', false,\''+genId+'\')"></i>'+
+                    '<i class="fa fa-save fa-2x" style="margin: 5px" onClick="saveSecret(\''+genId+'\',false)"></i>'+
+                    '<i class="fa fa-trash fa-2x" style="margin: 5px" onClick="removeSecret(\''+secret.key+'\', false,\''+genId+'\')"></i>'+
                 '</td>'+
             '</tr>');
         });
@@ -44,8 +44,8 @@ const addNewSecret = (() => {
                 '<input value="none" style="width:98%" type="hidden" id="secretKeyOrigin_'+genId+'"/>'+
             '</td>'+
             '<td style="text-align:center; margin:5x;">'+
-                '<i class="fa fa-save fa-2x" onClick="saveSecret(\''+genId+'\', true)"></i>'+
-                '<i class="fa fa-trash fa-2x" onClick="removeSecret(\'none\', true,\''+genId+'\')"></i>'+
+                '<i class="fa fa-save fa-2x" style="margin: 5px" onClick="saveSecret(\''+genId+'\', true)"></i>'+
+                '<i class="fa fa-trash fa-2x" style="margin: 5px" onClick="removeSecret(\'none\', true,\''+genId+'\')"></i>'+
             '</td>'+
         '</tr>');
    } else {
