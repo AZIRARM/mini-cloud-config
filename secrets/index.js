@@ -179,7 +179,7 @@ router.get('/manage-secrets/environments/:environmentName/applications', checkAu
     res.send(readConfiguration().filter(env => env.environment === environmentName ).map(environment => {
             return environment.applications.map(app => app.name);
         }
-    ));
+    ).flatMap(app => app));
     return ;
 });
 router.get('/manage-secrets/environments/:environmentName/applications/:applicationName', checkAuthorization, function(req,res){
