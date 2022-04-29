@@ -39,13 +39,19 @@ You can have several environments (a different name each time), each environment
 
 # How to use
 ```
-curl --location --request POST 'http://localhost:9000/secrets/dev/users-api/' \
+curl --location --request POST 'http://localhost:9000/secrets/dev/users-api/?option=yaml' \
 --header 'Accept: application/json' \
 --header 'Content-Type: application/json' \
 --header 'api-key: My-Super-Secret'
 ```
+2 Options to generate configuration file :
+* properties: is a properties files with classical key/value,
+* yaml: is a yaml file
+
+If no option in request param, the response is a json file.
 
 Today two authentication : token (in query param of url) and by api-key (in the headers of the request)
+
 
 ## With Docker
 
@@ -59,11 +65,11 @@ echo "Start retreive secrets"
 API_KEY= "api-key: $API_KEY"
 ACCEPT= "Accept: application/json"
 CONTENT_TYPE= "Content-Type: application/json"
-URL= "http://URL-MINI-CLOUD-CONFIG:9000/secrets/$ENV/users-api/"
+URL= "http://URL-MINI-CLOUD-CONFIG:9000/secrets/$ENV/users-api/?option=properties"
 
-curl -X POST --header "$API_KEY" --header "$ACCEPT" --header "$CONTENT_TYPE" "$URL" >> properties.json
+curl -X POST --header "$API_KEY" --header "$ACCEPT" --header "$CONTENT_TYPE" "$URL" >> /apps/myapp/resources/application.properties
 
-echo "Start replace secrets in conf file"
+#start myapp with external properties in param
 
 ..
 ..

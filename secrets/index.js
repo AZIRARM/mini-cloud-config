@@ -11,9 +11,11 @@ router.post('/secrets/*', (req, resp) => {
     url = url.split('/secrets')[1]
 
     let environment = url.split('/')[1];
-    let applicationName = url.split('/')[2];
+    let applicationName = (url.split('/')[2]).split("?")[0];
     console.debug("Environment  : " + environment);
     console.debug("Application  : " + applicationName);
+
+    let option = req.query.option;
 
     let settings =  readConfiguration();
 
@@ -37,9 +39,40 @@ router.post('/secrets/*', (req, resp) => {
                 application => {
                     console.debug("Application name : "+ application.name);
                     console.debug("Application description : "+ application.description);
+
+                    console.debug("Option: "+option);
+
                     resp.statusCode = 200;
-                    resp.json(application.secrets);
-                    return ;
+                    if( option && option !== null) {
+                        if(option === 'properties') {
+                            console.debug("Generate Properties");
+                            let result = "";
+                            application.secrets.map(secret => {
+                                result += "#"+ secret.description+"\n";
+                                result +=  secret.key+"="+secret.value+"\n\n";
+                            });
+                            resp.send(result);
+                        } else if(option === 'yaml' || option === 'yml') {
+                            console.debug("Generate Yaml");
+                            let result = "";
+                            application.secrets.map(secret => {
+                                result += "#"+ secret.description+"\n";
+                                result +=  secret.key+": "+secret.value+"\n\n";
+                            });
+                            resp.send(result);
+                            return;
+                        } else {
+                            console.debug("Generate Json");
+                            resp.json(application.secrets);
+                            return;
+                        }
+                    } else {
+                        console.debug("Generate Json");
+                        resp.json(application.secrets);
+                        return;
+                    }
+
+                    return;
                 }
             );
         }

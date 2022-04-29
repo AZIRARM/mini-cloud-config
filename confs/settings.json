@@ -1,6 +1,6 @@
 [
   {
-    "environment": "development",
+    "environment": "dev",
     "description": "development environment for developer",
     "authenticationType": "api-key",
     "authenticationSecret": "My-Super-Secret",
