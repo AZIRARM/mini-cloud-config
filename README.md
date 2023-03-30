@@ -1,7 +1,11 @@
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](./license.md)
  
 # mini-cloud-config
-Mini cloud config to manage configurations
+Mini cloud config to manage configurations.
+
+This project is usable, it is constantly evolving to make it more robust, easier to use with the integration of an API and dependencies in popular languages such as java and javascript.
+
+Mini Cloud Config is completely free and Open Source, usable in the cloud, on large projects on microservices... .
 
 # Settings
 The configuration is very easy to understand, just fill in the settings.json file in the confs/ folder.
